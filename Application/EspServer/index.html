@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Yuri's Remote Control</title>
+ 
+  <style>
+    body {
+      background-color: #363842;
+      color: #949ba2;
+      font-family: helvetica;
+      font-size: 14px;
+      margin: 0;
+      padding: 0;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none
+    }
+
+    h3 {
+      color: #eee;
+      font-weight: 100;
+      margin: 10px 0;
+      font-size: 17px
+    }
+
+    #header {
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 40px;
+      color: #323232;
+      color: #323232;
+      line-height: 40px;
+      text-align: center
+    }
+
+    #logoPart {
+      width: 200px;
+      height: 40px;
+      float: left;
+      margin: 0;
+      color: #eee;
+      font-size: 14px;
+      background-color: #e8423e;
+      line-height: 40px;
+      padding-left: 15px;
+      letter-spacing: 1px;
+      text-align: LEFT
+    }
+
+
+    #workPart {
+      background-color: #363842;
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: 10px 50px 120px 50px
+    }
+
+
+
+    .tabBody {
+      border: 1px solid #999;
+      padding: 15px 30px;
+      min-height: 200px;
+      background: #27282f
+    }
+
+    .btn {
+      background: 0;
+      color: #949ca2;
+      border: 1px solid #949ca2;
+      height: 30px;
+      font-size: 14px;
+      cursor: pointer;
+      margin: 0px 10px 10px 10px;
+    }
+
+    .btn:hover {
+      color: #eee
+    }
+	
+    .bottomRow {
+      margin-bottom: 1px
+    }
+
+    #logMsg {
+      background: #010101;
+      width: 100%;
+      height: 80px;
+      color: #eee;
+      position: fixed;
+      bottom: 0;
+      padding: 5px 20px;
+      font-size: 12px;
+      border-top: 1px solid #5f4444
+    }
+
+    #logMsg p {
+      padding: 0;
+      margin: 2px
+    }
+
+  </style>
+  <script type=text/javascript>
+    function ajaxSend(a, d) {
+      var b = new XMLHttpRequest();
+      var c = window.location.href + a;
+      if (b != null) {
+        b.onreadystatechange = function() {
+          if (b.readyState == 4 && b.status == 200) {
+            if (d != null) {
+              d(b.responseText)
+            }
+          }
+        };
+        b.open("GET", c, true);
+        b.send()
+      } else {
+        logMessage("Error", "Failed to create XMLHttpRequest")
+      }
+      return ""
+    }
+	
+	function logMessage(b, d) {
+      var a = document.getElementById("logMsg");
+      var c = document.querySelectorAll(".msg");
+      if (c.length > 4) {
+        a.removeChild(c[0])
+      }
+      a.insertAdjacentHTML("beforeend", "<p class='" + b + " msg'>" + d + "</p>")
+    }
+
+
+    function postJSON(a, c) {
+      var b = new XMLHttpRequest();
+	  logMessage("Log", "Post to page: " + a + " msg:" + c);
+      b.open("POST", a, true);
+      b.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      b.send(c);
+      return b.responseText
+    }
+
+    function logMessage(b, d) {
+      var a = document.getElementById("logMsg");
+      var c = document.querySelectorAll(".msg");
+      if (c.length > 4) {
+        a.removeChild(c[0])
+      }
+      a.insertAdjacentHTML("beforeend", "<p class='" + b + " msg'>" + d + "</p>")
+    }
+
+
+    function changeTabPage(b) {
+      var a = document.querySelectorAll(".tabData");
+      for (var c = 0; c < a.length; c++) {
+        a[c].classList.add("hidden");
+      }
+      document.getElementById(b + "Body").classList.remove("hidden");
+    }
+
+  </script>
+
+  <body onload=dataLoad()>
+    <div id=header>
+      <div id=logoPart><span>Remote Control Menu</span><i id=menuIcon></i></div>
+      WHY WOULD YOU BUY A UNIVERSAL CONTROL WHEN YOU CAN MAKE A BETTER ONE?
+    </div>
+    <div id=workPart>
+      <div class=tabBody>
+        <div id=timeBody class=tabData>
+          <br />
+          <h3>Shortcut Keys: 
+		  <button class=btn onclick=postJSON("/command","")>It is Play Time!</button>
+		  <button class=btn onclick=postJSON("/command","")>It is Netflix Time!</button>
+		  <button class=btn onclick=postJSON("/command","")>I Gotta Sleep!</button>
+		  </h3>
+          <div class=row>
+            <button class=btn onclick=postJSON("/command","1")>VOL+</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button class=btn onclick=postJSON("/command","4")>CH +</button>
+          </div>
+		  <div class=row>
+            <button class=btn onclick=postJSON("/command","2")>VOL -</button>
+			<button class=btn onclick=postJSON("/command","3")>POWER</button>
+			<button class=btn onclick=postJSON("/command","5")>CH -</button>
+          </div>
+		  <div class=row>
+            <button class=btn onclick=postJSON("/command","6")>MUTE</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button class=btn onclick=postJSON("/command","7")>INPUT</button>
+          </div>
+		  <div class=row>
+            <button class=btn onclick=postJSON("/command","8")>MENU</button>
+			<button class=btn onclick=postJSON("/command","9")>GUIDE</button>&nbsp;
+			<button class=btn onclick=postJSON("/command","10")>INFO</button>
+          </div>
+		  <br>
+		  <div class=row>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button class=btn onclick=postJSON("/command","11")>---UP---</button>
+          </div>
+		  <div class=row>
+			<button class=btn onclick=postJSON("/command","12")><--</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button class=btn onclick=postJSON("/command","13")>-OK-</button>&nbsp;&nbsp;&nbsp;&nbsp;
+			<button class=btn onclick=postJSON("/command","14")>--></button>
+          </div>
+		  <div class=row>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button class=btn onclick=postJSON("/command","15")>-DOWN-</button>&nbsp;
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div id=logMsg>
+      <p class="default msg">Page loaded success</p>
+    </div>
+  </body>
+
+</html>
